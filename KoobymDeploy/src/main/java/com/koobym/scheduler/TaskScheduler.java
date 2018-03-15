@@ -242,9 +242,9 @@ public class TaskScheduler {
 
 		for (AuctionDetail rh : auctionDetailEndDates) {
 			System.out.println("nisulod siya sa for loop");
-			System.out.println(
-					formattedDate + "\t" + rh.getEndDate() + "\t" + dateLaterOrEqual(formattedDate, rh.getEndDate()));
-			if (dateLaterOrEqual(formattedDate, rh.getEndDate())) {
+			System.out.println(formattedDate + "\t" + rh.getEndDate() + "\t" + dateLaterOrEqual(formattedDate, rh.getEndDate()));
+			
+			if (!"pending".equals(rh.getAuctionStatus())&&!"stop".equals(rh.getAuctionStatus())&&dateLaterOrEqual(formattedDate, rh.getEndDate())) {
 				System.out.println("sulod sa end date");
 				System.out.println("formatted:" + formattedData + "rh time:" + rh.getEndTime());
 				System.out.println(formattedData + "\t" + rh.getEndTime() + "\t"
