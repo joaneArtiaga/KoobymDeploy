@@ -1,7 +1,10 @@
 package com.koobym.dao.impl;
 
 import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -472,25 +475,20 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 
 	public SwapHeader approveRequest(long swapHeaderId) {
 		SwapHeader sh = new SwapHeader();
+		
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+		String currDate =df.format(cal.getTime());
+		
 		sh = get(swapHeaderId);
 
 		Set<SwapHeaderDetail> shd = sh.getSwapHeaderDetails();
 		Set<SwapHeaderDetail> shdetail = new HashSet<SwapHeaderDetail>();
 
-		for (SwapHeaderDetail detail : shd) {
-			detail.getSwapDetail().setSwapStatus("Not Available");
-			detail.getSwapDetail().getBookOwner().setBookStat("Not Available");
-			shdetail.add(detail);
-		}
-
+		sh.setDateApproved(currDate);
 		sh.setStatus("Approved");
 		sh.setSwapHeaderDetails(shdetail);
-		sh.getSwapDetail().setSwapStatus("Not Available");
-		sh.getRequestedSwapDetail().setSwapStatus("Not Available");
-		sh.getSwapDetail().getBookOwner().setBookStat("Not Available");
-		sh.getRequestedSwapDetail().getBookOwner().setBookStat("Not Available");
-
 		Session session = getSessionFactory().getCurrentSession();
 		session.update(sh);
 
@@ -521,6 +519,7 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 
 			if (!(swapHeaderTemp.equals(swapHeaderId))) {
 				swapHeaderTemp.setStatus("Rejected");
+				swapHeaderTemp.setDateRejected(currDate);
 				swapHeaderTemp.setSwapExtraMessage("Accepted other request.");
 				session.update(swapHeaderTemp);
 

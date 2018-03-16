@@ -240,40 +240,35 @@ public class TaskScheduler {
 		System.out.println("kuan = " + auctionDetailEndDates.size());
 		UserNotification un, unO;
 
-		for (AuctionDetail rh : auctionDetailEndDates) {
+		for (AuctionDetail rh : auctionDetailEndDates) {			
 			System.out.println("nisulod siya sa for loop");
-			System.out.println(formattedDate + "\t" + rh.getEndDate() + "\t" + dateLaterOrEqual(formattedDate, rh.getEndDate()));
-			
-			if (!"pending".equals(rh.getAuctionStatus())&&!"stop".equals(rh.getAuctionStatus())&&dateLaterOrEqual(formattedDate, rh.getEndDate())) {
-				System.out.println("sulod sa end date");
-				System.out.println("formatted:" + formattedData + "rh time:" + rh.getEndTime());
-				System.out.println(formattedData + "\t" + rh.getEndTime() + "\t"
-						+ timeLaterOrEqual(formattedData, rh.getEndTime()));
 
-				if (timeLaterOrEqual(formattedData, rh.getEndTime())) {
+			if (formattedDate.equals(rh.getEndDate())) {
+
+				System.out.println("sulod sa end date");
+
+				System.out.println("formatted:" + formattedData + "rh time:" + rh.getEndTime());
+
+				if (formattedData.equals(rh.getEndTime())) {
 					System.out.println("sulod sa rh : " + rh.getEndDate());
 					List<AuctionComment> modelComments = auctionCommentDao.getMaximumBid((int) rh.getAuctionDetailId());
 					System.out.println("after getting maximum bid");
-
-					if (modelComments.size() == 0) {
+					
+					if(modelComments.size()==0){
 						AuctionDetail ad = new AuctionDetail();
 						ad = auctionDetailDao.get(rh.getAuctionDetailId());
 						ad.setAuctionStatus("stop");
 						ad.setStatus("Not Available");
 						ad.getBookOwner().setBookStat("Not Available");
 						auctionDetailDao.update(ad);
-
+						
 					}
+					
 
 					for (int i = 0; i < modelComments.size(); i++) {
-						System.out.println("stoppedAuction");
-
-						List<AuctionHeader> ahList = new ArrayList<AuctionHeader>();
-						AuctionDetail ad = new AuctionDetail();
 						AuctionHeader ah = new AuctionHeader();
-						ahList = auctionHeaderDao.getAuctionHeader(rh.getAuctionDetailId(),
-								modelComments.get(i).getUser().getUserId());
-						ah = ahList.get(0);
+						AuctionDetail ad = new AuctionDetail();
+						ah = (AuctionHeader) auctionHeaderDao.getAuctionHeader(rh.getAuctionDetailId(), modelComments.get(i).getUser().getUserId());
 						ad = ah.getAuctionDetail();
 						un = new UserNotification();
 						un.setActionId(ah.getAuctionHeaderId());
@@ -282,13 +277,12 @@ public class TaskScheduler {
 						un.setUser(modelComments.get(i).getUser());
 						un.setUserPerformer(rh.getBookOwner().getUser());
 						String message = String.valueOf(modelComments.get(i).getAuctionComment());
-
+						
 						if (i == 0) {
-							System.out.println("daog here");
 							ah.setStatus("win");
 							un.setActionStatus("win");
 							un.setExtraMessage(message);
-
+							
 							unO = new UserNotification();
 							unO.setUser(rh.getBookOwner().getUser());
 							unO.setBookActionPerformedOn(rh.getBookOwner());
@@ -297,12 +291,10 @@ public class TaskScheduler {
 							unO.setActionStatus("own");
 							unO.setUserPerformer(modelComments.get(i).getUser());
 							unO.setExtraMessage(message);
-
+							
 							userNotificationDao.save(unO);
 							pusherServer.sendNotification(unO);
 						} else {
-							System.out.println("pildi here");
-
 							ah.setStatus("lose");
 							un.setActionStatus("lose");
 							un.setExtraMessage(message);
@@ -313,12 +305,13 @@ public class TaskScheduler {
 						userNotificationDao.save(un);
 						pusherServer.sendNotification(un);
 					}
-
+					
+					
 				}
 			}
 		}
 	}
-
+	
 	@Transactional
 	@Scheduled(fixedRate = 1500000)
 	public void checkToDeliver() {
