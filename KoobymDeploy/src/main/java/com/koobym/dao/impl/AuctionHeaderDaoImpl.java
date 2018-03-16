@@ -191,7 +191,6 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 		ah = get(auctionHeaderId);
 		user = ah.getUser();
 		ah.setStatus("Complete");
-		ah.getAuctionDetail().getBookOwner().setStatus("none");
 		ah.getAuctionDetail().getBookOwner().setUser(user);
 
 		Session session = getSessionFactory().getCurrentSession();
@@ -202,8 +201,8 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 		un.setActionName("auction");
 		un.setActionStatus("Complete");
 		un.setBookActionPerformedOn(ah.getAuctionDetail().getBookOwner());
-		un.setUser(ah.getAuctionDetail().getBookOwner().getUser());
-		un.setUserPerformer(user);
+		un.setUserPerformer(ah.getAuctionDetail().getBookOwner().getUser());
+		un.setUser(user);
 		un.setExtraMessage(String.valueOf(userRatingId));
 
 		userNotificationDao.save(un);
@@ -217,6 +216,10 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(AuctionHeader.class);
 		criteria = criteria.createAlias("user", "user");
+		criteria = criteria.createAlias("auctionDetail", "auctionDetail");
+		criteria = criteria.createAlias("auctionDetail.bookOwner", "bookOwner");
+		criteria = criteria.createAlias("bookOwner.user", "userBook");
+		criteria = criteria.add(Restrictions.eq("userBook.userId", userId));
 		criteria = criteria.add(Restrictions.eq("user.userId", userId));
 		criteria = criteria.add(Restrictions.eq("status", "Complete"));
 		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

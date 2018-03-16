@@ -56,39 +56,39 @@ public class TaskScheduler {
 	@Autowired
 	private PusherServer pusherServer;
 
-	@Transactional
-	@Scheduled(fixedRate = 60000)
-	public void checkRentalEndDates() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-		List<RentalHeader> rentalHeadersWithElapsedEndDates = rentalHeaderDao.getElapsedRentalDate();
-		UserNotification un;
-		for (RentalHeader rh : rentalHeadersWithElapsedEndDates) {
-
-			rentalHeaderDao.setApprovedExam(rh.getRentalHeaderId(), "Due", format.format(new Date()));
-			un = new UserNotification();
-
-			un.setActionId(rh.getRentalHeaderId());
-			un.setActionName("rental");
-			un.setActionStatus("Due");
-			un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
-			un.setUser(rh.getUserId());
-			un.setUserPerformer(rh.getRentalDetail().getBookOwner().getUser());
-
-			userNotificationDao.save(un);
-			pusherServer.sendNotification(un);
-
-			un = new UserNotification();
-			un.setActionId(rh.getRentalHeaderId());
-			un.setActionName("rental");
-			un.setActionStatus("Due");
-			un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
-			un.setUser(rh.getRentalDetail().getBookOwner().getUser());
-			un.setUserPerformer(rh.getUserId());
-
-			userNotificationDao.save(un);
-			pusherServer.sendNotification(un);
-		}
-	}
+//	@Transactional
+//	@Scheduled(fixedRate = 60000)
+//	public void checkRentalEndDates() {
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+//		List<RentalHeader> rentalHeadersWithElapsedEndDates = rentalHeaderDao.getElapsedRentalDate();
+//		UserNotification un;
+//		for (RentalHeader rh : rentalHeadersWithElapsedEndDates) {
+//
+//			rentalHeaderDao.setApprovedExam(rh.getRentalHeaderId(), "Due", format.format(new Date()));
+//			un = new UserNotification();
+//
+//			un.setActionId(rh.getRentalHeaderId());
+//			un.setActionName("rental");
+//			un.setActionStatus("Due");
+//			un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
+//			un.setUser(rh.getUserId());
+//			un.setUserPerformer(rh.getRentalDetail().getBookOwner().getUser());
+//
+//			userNotificationDao.save(un);
+//			pusherServer.sendNotification(un);
+//
+//			un = new UserNotification();
+//			un.setActionId(rh.getRentalHeaderId());
+//			un.setActionName("rental");
+//			un.setActionStatus("Due");
+//			un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
+//			un.setUser(rh.getRentalDetail().getBookOwner().getUser());
+//			un.setUserPerformer(rh.getUserId());
+//
+//			userNotificationDao.save(un);
+//			pusherServer.sendNotification(un);
+//		}
+//	}
 
 	@Transactional
 	@Scheduled(fixedRate = 60000)
@@ -141,84 +141,84 @@ public class TaskScheduler {
 		}
 	}
 
-	@Transactional
-	@Scheduled(fixedRate = 86400000)
-	public void sendRemindNotification() {
-		System.out.println("sendRemindNotification");
-		Date date = new Date();
-		String stdDateFormat = "yyyy-MM-dd";
-		DateFormat dateFormat = new SimpleDateFormat(stdDateFormat);
-		String currDate = dateFormat.format(date);
-		System.out.println("currentDate: " + currDate);
+//	@Transactional
+//	@Scheduled(fixedRate = 86400000)
+//	public void sendRemindNotification() {
+//		System.out.println("sendRemindNotification");
+//		Date date = new Date();
+//		String stdDateFormat = "yyyy-MM-dd";
+//		DateFormat dateFormat = new SimpleDateFormat(stdDateFormat);
+//		String currDate = dateFormat.format(date);
+//		System.out.println("currentDate: " + currDate);
+//
+//		List<SwapHeader> swapHeader = swapHeaderDao.swapNotifyScheuler();
+//		System.out.println("swapHeaderSize: " + swapHeader.size());
+//		UserNotification userNotify, userOwner;
+//
+//		for (int init = 0; init < swapHeader.size(); init++) {
+//
+//			String comparedDelivery = swapHeader.get(init).getDateDelivered();
+//			Date compared;
+//			try {
+//				compared = dateFormat.parse(comparedDelivery);
+//				Calendar cal = Calendar.getInstance();
+//				cal.setTime(compared);
+//				cal.add(Calendar.DATE, -1);
+//				Date comapreDate = cal.getTime();
+//
+//				System.out.println("DeliverDate:" + comparedDelivery + " PrevDate:" + dateFormat.format(comapreDate));
+//
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		for (SwapHeader sh : swapHeader) {
+//
+//			try {
+//				String comparedDelivery = sh.getDateDelivered();
+//				Date compared;
+//				compared = dateFormat.parse(comparedDelivery);
+//
+//				Calendar cal = Calendar.getInstance();
+//				cal.setTime(compared);
+//				cal.add(Calendar.DATE, -1);
+//				Date comapreDate = cal.getTime();
+//
+//				System.out.println("DeliverDate:" + comparedDelivery + " PrevDate:" + dateFormat.format(comapreDate));
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//
+//		}
+//	}
 
-		List<SwapHeader> swapHeader = swapHeaderDao.swapNotifyScheuler();
-		System.out.println("swapHeaderSize: " + swapHeader.size());
-		UserNotification userNotify, userOwner;
-
-		for (int init = 0; init < swapHeader.size(); init++) {
-
-			String comparedDelivery = swapHeader.get(init).getDateDelivered();
-			Date compared;
-			try {
-				compared = dateFormat.parse(comparedDelivery);
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(compared);
-				cal.add(Calendar.DATE, -1);
-				Date comapreDate = cal.getTime();
-
-				System.out.println("DeliverDate:" + comparedDelivery + " PrevDate:" + dateFormat.format(comapreDate));
-
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-
-		for (SwapHeader sh : swapHeader) {
-
-			try {
-				String comparedDelivery = sh.getDateDelivered();
-				Date compared;
-				compared = dateFormat.parse(comparedDelivery);
-
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(compared);
-				cal.add(Calendar.DATE, -1);
-				Date comapreDate = cal.getTime();
-
-				System.out.println("DeliverDate:" + comparedDelivery + " PrevDate:" + dateFormat.format(comapreDate));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-
-		}
-	}
-
-	private boolean dateLaterOrEqual(String date1, String date2) {
-		boolean flag = false;
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate ld = LocalDate.parse(date1, formatter);
-		LocalDate ld2 = LocalDate.parse(date2, formatter);
-
-		flag = ld.isAfter(ld2) || ld.isEqual(ld2);
-
-		return flag;
-	}
-
-	private boolean timeLaterOrEqual(String time1, String time2) {
-		boolean flag = false;
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
-		LocalTime ld = LocalTime.parse(time1, formatter);
-		LocalTime ld2 = LocalTime.parse(time2, formatter);
-
-		int com = ld.compareTo(ld2);
-		if (com == 0 || com > 0) {
-			flag = true;
-		}
-
-		return flag;
-	}
+//	private boolean dateLaterOrEqual(String date1, String date2) {
+//		boolean flag = false;
+//
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//		LocalDate ld = LocalDate.parse(date1, formatter);
+//		LocalDate ld2 = LocalDate.parse(date2, formatter);
+//
+//		flag = ld.isAfter(ld2) || ld.isEqual(ld2);
+//
+//		return flag;
+//	}
+//
+//	private boolean timeLaterOrEqual(String time1, String time2) {
+//		boolean flag = false;
+//
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+//		LocalTime ld = LocalTime.parse(time1, formatter);
+//		LocalTime ld2 = LocalTime.parse(time2, formatter);
+//
+//		int com = ld.compareTo(ld2);
+//		if (com == 0 || com > 0) {
+//			flag = true;
+//		}
+//
+//		return flag;
+//	}
 
 	@Transactional
 	@Scheduled(fixedRate = 60000)
@@ -245,8 +245,6 @@ public class TaskScheduler {
 
 			if (formattedDate.equals(rh.getEndDate())) {
 
-				System.out.println("sulod sa end date");
-
 				System.out.println("formatted:" + formattedData + "rh time:" + rh.getEndTime());
 
 				if (formattedData.equals(rh.getEndTime())) {
@@ -268,7 +266,8 @@ public class TaskScheduler {
 					for (int i = 0; i < modelComments.size(); i++) {
 						AuctionHeader ah = new AuctionHeader();
 						AuctionDetail ad = new AuctionDetail();
-						ah = (AuctionHeader) auctionHeaderDao.getAuctionHeader(rh.getAuctionDetailId(), modelComments.get(i).getUser().getUserId());
+						List<AuctionHeader> ahList = auctionHeaderDao.getAuctionHeader(rh.getAuctionDetailId(), modelComments.get(i).getUser().getUserId());
+						ah = ahList.get(0); 
 						ad = ah.getAuctionDetail();
 						un = new UserNotification();
 						un.setActionId(ah.getAuctionHeaderId());
