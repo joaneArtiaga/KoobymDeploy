@@ -545,20 +545,16 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 		BookOwner bo = new BookOwner();
 		Session session = getSessionFactory().getCurrentSession();
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+		String currDate =df.format(cal.getTime());
+
+		
 		sh = get(swapHeaderId);
 		sd = sh.getSwapHeaderDetails();
 
-		for (SwapHeaderDetail shd : sd) {
-			if (shd.getSwapType().equals("Requestor")) {
-				shd.getSwapDetail().setSwapStatus("Available");
-				session.update(shd.getSwapDetail());
-				shd.getSwapDetail().getBookOwner().setBookStat("Available");
-				session.update(shd.getSwapDetail().getBookOwner());
-				shd.getSwapDetail().getBookOwner().getBook().setStatus("Available");
-				session.update(shd.getSwapDetail().getBookOwner().getBook());
-			}
-		}
-
+		sh.setDateRejected(currDate);
 		sh.setStatus("Rejected");
 
 		session.update(sh);
