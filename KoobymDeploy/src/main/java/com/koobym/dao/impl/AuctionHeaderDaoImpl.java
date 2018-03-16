@@ -190,6 +190,7 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 
 		ah = get(auctionHeaderId);
 		user = ah.getUser();
+		ah.setUser(ah.getAuctionDetail().getBookOwner().getUser());
 		ah.setStatus("Complete");
 		ah.getAuctionDetail().getBookOwner().setUser(user);
 
