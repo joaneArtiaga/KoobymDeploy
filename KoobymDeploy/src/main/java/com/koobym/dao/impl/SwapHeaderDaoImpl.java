@@ -390,7 +390,7 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 		return sh;
 	}
 
-	public SwapHeader setComplete(long swapHeaderId) {
+	public SwapHeader setComplete(long swapHeaderId, long userRatingId) {
 		Session session = getSessionFactory().getCurrentSession();
 		SwapHeader sh = new SwapHeader();
 		sh = get(swapHeaderId);
@@ -409,7 +409,7 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 		un.setActionName("swap");
 		un.setActionStatus("Completed");
 		un.setBookActionPerformedOn(sh.getSwapDetail().getBookOwner());
-		un.setExtraMessage(String.valueOf(sh.getRequestedSwapDetail().getSwapDetailId()));
+		un.setExtraMessage(String.valueOf(userRatingId));
 		un.setUser(sh.getSwapDetail().getBookOwner().getUser());
 		un.setUserPerformer(sh.getRequestedSwapDetail().getBookOwner().getUser());
 		userNotificationDao.save(un);

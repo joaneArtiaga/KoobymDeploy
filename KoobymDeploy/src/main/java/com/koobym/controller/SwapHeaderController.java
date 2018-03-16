@@ -147,9 +147,9 @@ public class SwapHeaderController {
 		return flag;
 	}
 
-	@RequestMapping(value = "/setComplete/{swapHeaderId}", method = RequestMethod.GET)
-	public ResponseEntity<SwapHeader> setComplete(@PathVariable("swapHeaderId") long swapHeaderId) {
-		ResponseEntity<SwapHeader> flag = ResponseEntity.ok(swapHeaderService.setComplete(swapHeaderId));
+	@RequestMapping(value = "/setComplete/{swapHeaderId}/{userRatingId}", method = RequestMethod.GET)
+	public ResponseEntity<SwapHeader> setComplete(@PathVariable("swapHeaderId") long swapHeaderId, @PathVariable("userRatingId") long userRatingId) {
+		ResponseEntity<SwapHeader> flag = ResponseEntity.ok(swapHeaderService.setComplete(swapHeaderId, userRatingId));
 		return flag;
 	}
 

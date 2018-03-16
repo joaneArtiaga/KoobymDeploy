@@ -209,8 +209,8 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 	}
 
 	@Override
-	public SwapHeader setComplete(long swapHeaderId) {
-		return swapHeaderDao.setComplete(swapHeaderId);
+	public SwapHeader setComplete(long swapHeaderId, long userRatingId) {
+		return swapHeaderDao.setComplete(swapHeaderId, userRatingId);
 	}
 
 	@Override
