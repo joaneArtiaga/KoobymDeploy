@@ -399,6 +399,12 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 		SwapDetail toBeSwapped = new SwapDetail();
 		User requestor = new User();
 		User requestee = new User();
+		
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String currdate = df.format(cal.getTime());
+		sh.setDateReceived(currdate);
 
 		System.out.println("SwapUSer=" + sh.getSwapDetail().getBookOwner().getUser().getUserId());
 		System.out.println("ReqSwapUSer=" + sh.getRequestedSwapDetail().getBookOwner().getUser().getUserId());
