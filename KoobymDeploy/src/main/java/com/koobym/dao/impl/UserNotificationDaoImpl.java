@@ -58,12 +58,20 @@ public class UserNotificationDaoImpl extends BaseDaoImpl<UserNotification, Long>
 	}
 	
 	@Override
+	public void notificationIsProcessed(long userNotificationId) {
+		UserNotification userNotif = get(userNotificationId);
+		userNotif.setProcessedBool(true);
+		update(userNotif);
+	}
+	
+	@Override
 	public UserNotification sendEarlyNotif(long rentalHeaderId){
 		UserNotification un = new UserNotification();
 		RentalHeader rentalHeader = new RentalHeader();
 		
 		rentalHeader = rentalHeaderDao.get(rentalHeaderId);
 		
+		un.setProcessedBool(false);
 		un.setActionId(rentalHeader.getRentalHeaderId());
 		un.setActionName("rental");
 		un.setUser(rentalHeader.getRentalDetail().getBookOwner().getUser());
@@ -96,6 +104,7 @@ public class UserNotificationDaoImpl extends BaseDaoImpl<UserNotification, Long>
 		un.setUser(rentalHeader.getUserId());
 		un.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
 		un.setExtraMessage("Confirm");
+		un.setProcessedBool(false);
 		
 		rentalHeader.setRentalReturnDate(rentalHeader.getReturnMeetUp().getUserDayTime().getDays().getStrDay());
 		

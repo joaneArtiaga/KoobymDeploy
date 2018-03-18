@@ -47,6 +47,17 @@ public class UserNotification {
 	@Column(name = "isRead")
 	private boolean isRead;
 
+	@Column(name = "processedBool")
+	private boolean processedBool;
+	
+	public Boolean getProcessedBool(){
+		return processedBool;
+	}
+	
+	public void setProcessedBool(boolean processedBool){
+		this.processedBool = processedBool;
+	}
+	
 	public String getExtraMessage(){
 		return this.extraMessage;
 	}

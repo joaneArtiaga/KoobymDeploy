@@ -58,6 +58,13 @@ public class UserNotificationController {
 		ResponseEntity<Void> flag = new ResponseEntity<Void>(HttpStatus.OK);
 		return flag;
 	}
+	
+	@RequestMapping(value = "/notificationProcessed/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Void> notificationProcessed(@PathVariable("id") long id) {
+		userNotificationService.notificationIsProcessed(id);
+		ResponseEntity<Void> flag = new ResponseEntity<Void>(HttpStatus.OK);
+		return flag;
+	}
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public ResponseEntity<List<UserNotification>> getRoles() {

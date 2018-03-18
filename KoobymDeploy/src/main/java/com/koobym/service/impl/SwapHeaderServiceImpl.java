@@ -78,6 +78,7 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 			userNotif.setActionId(swapHeader.getSwapHeaderId());
 			userNotif.setActionName("swap");
 			userNotif.setActionStatus(status);
+			userNotif.setProcessedBool(false);
 			userNotif.setUser(swapHeader.getRequestedSwapDetail().getBookOwner().getUser());
 			userNotif.setBookActionPerformedOn(swapHeader.getRequestedSwapDetail().getBookOwner());
 			userNotificationDao.save(userNotif);
@@ -92,6 +93,7 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 			userNotif.setActionId(swapHeader.getSwapHeaderId());
 			userNotif.setActionName("swap");
 			userNotif.setActionStatus(status);
+			userNotif.setProcessedBool(false);
 			userNotif.setUser(swapHeader.getRequestedSwapDetail().getBookOwner().getUser());
 			userNotif.setBookActionPerformedOn(swapHeader.getSwapDetail().getBookOwner());
 			userNotificationDao.save(userNotif);
@@ -104,6 +106,7 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 			userNotif.setUserPerformer(swapHeader.getRequestedSwapDetail().getBookOwner().getUser());
 			userNotif.setActionId(swapHeader.getSwapHeaderId());
 			userNotif.setActionName("swap");
+			userNotif.setProcessedBool(false);
 			userNotif.setActionStatus(status);
 			userNotif.setUser(swapHeader.getSwapDetail().getBookOwner().getUser());
 			userNotif.setBookActionPerformedOn(swapHeader.getSwapDetail().getBookOwner());
@@ -118,6 +121,7 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 			userNotif.setActionId(swapHeader.getSwapHeaderId());
 			userNotif.setActionName("swap");
 			userNotif.setActionStatus(status);
+			userNotif.setProcessedBool(false);
 			userNotif.setUserPerformer(swapHeader.getSwapDetail().getBookOwner().getUser());
 			userNotif.setBookActionPerformedOn(swapHeader.getSwapDetail().getBookOwner());
 			userNotificationDao.save(userNotif);
@@ -131,6 +135,7 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 			userNotif.setActionId(swapHeader.getSwapHeaderId());
 			userNotif.setActionName("swap");
 			userNotif.setActionStatus(status);
+			userNotif.setProcessedBool(false);
 			userNotif.setUser(swapHeader.getSwapDetail().getBookOwner().getUser());
 			userNotif.setBookActionPerformedOn(swapHeader.getSwapDetail().getBookOwner());
 			userNotificationDao.save(userNotif);
@@ -139,6 +144,7 @@ public class SwapHeaderServiceImpl extends BaseServiceImpl<SwapHeader, Long> imp
 			userNotif.setUser(swapHeader.getRequestedSwapDetail().getBookOwner().getUser());
 			userNotif.setActionId(swapHeader.getSwapHeaderId());
 			userNotif.setActionName("swap");
+			userNotif.setProcessedBool(false);
 			userNotif.setActionStatus(status);
 			userNotif.setUserPerformer(swapHeader.getSwapDetail().getBookOwner().getUser());
 			userNotif.setBookActionPerformedOn(swapHeader.getRequestedSwapDetail().getBookOwner());

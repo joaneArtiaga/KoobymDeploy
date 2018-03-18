@@ -13,4 +13,5 @@ public interface UserNotificationService extends BaseService<UserNotification, L
 	public UserNotification updateRentalExtraMessage(long userNotificationId);
 	public UserNotification updateSwapExtraMessage(long userNotificationId);
 	public int getCountNotRead(long userId);
+	public void notificationIsProcessed(long userNotificationId);
 }

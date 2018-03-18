@@ -63,4 +63,9 @@ public class UserNotificationServiceImpl extends BaseServiceImpl<UserNotificatio
 	public int getCountNotRead(long userId){
 		return userNotificationDao.getCountNotRead(userId);
 	}
+	
+	@Override
+	public void notificationIsProcessed(long userNotificationId){
+		userNotificationDao.notificationIsProcessed(userNotificationId);
+	}
 }

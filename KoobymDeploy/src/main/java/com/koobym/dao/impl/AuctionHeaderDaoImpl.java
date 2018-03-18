@@ -177,6 +177,7 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 		un.setActionStatus("delivered");
 		un.setBookActionPerformedOn(ah.getAuctionDetail().getBookOwner());
 		un.setUser(ah.getUser());
+		un.setProcessedBool(false);
 		un.setUserPerformer(ah.getAuctionDetail().getBookOwner().getUser());
 		userNotificationDao.save(un);
 		pusherServer.sendNotification(un);
@@ -201,6 +202,7 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 		un.setActionId(auctionHeaderId);
 		un.setActionName("auction");
 		un.setActionStatus("Complete");
+		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(ah.getAuctionDetail().getBookOwner());
 		un.setUserPerformer(ah.getAuctionDetail().getBookOwner().getUser());
 		un.setUser(user);

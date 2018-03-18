@@ -105,6 +105,7 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 			userNotif.setActionId(rentalHeader.getRentalHeaderId());
 			userNotif.setActionName("rental");
 			userNotif.setActionStatus(status);
+			userNotif.setProcessedBool(false);
 			userNotif.setUserPerformer(rentalHeader.getUserId());
 			userNotif.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
 			userNotificationDao.save(userNotif);
@@ -117,6 +118,7 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 			userNotif.setUserPerformer(rentalHeader.getRentalDetail().getBookOwner().getUser());
 			userNotif.setActionId(rentalHeader.getRentalHeaderId());
 			userNotif.setActionName("rental");
+			userNotif.setProcessedBool(false);
 			userNotif.setActionStatus(status);
 			userNotif.setUser(rentalHeader.getUserId());
 			userNotif.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
@@ -132,6 +134,7 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 			userNotif.setActionId(rentalHeader.getRentalHeaderId());
 			userNotif.setActionName("rental");
 			userNotif.setActionStatus(status);
+			userNotif.setProcessedBool(false);
 			userNotif.setUser(rentalHeader.getUserId());
 			userNotif.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
 			userNotificationDao.save(userNotif);
@@ -144,6 +147,7 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 			userNotif.setUser(rentalHeader.getRentalDetail().getBookOwner().getUser());
 			userNotif.setActionId(rentalHeader.getRentalHeaderId());
 			userNotif.setActionName("rental");
+			userNotif.setProcessedBool(false);
 			userNotif.setActionStatus(status);
 			userNotif.setUserPerformer(rentalHeader.getUserId());
 			userNotif.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
@@ -188,6 +192,7 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 		userNotif.setActionId(rentalHeader.getRentalHeaderId());
 		userNotif.setActionName("rental");
 		userNotif.setActionStatus("Request");
+		userNotif.setProcessedBool(false);
 		userNotif.setUserPerformer(rentalHeader.getUserId());
 		userNotif.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
 		userNotificationDao.save(userNotif);
@@ -216,6 +221,7 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 		userNotif.setActionId(rentalHeader.getRentalHeaderId());
 		userNotif.setActionName("rental");
 		userNotif.setActionStatus("Chose meet up details.");
+		userNotif.setProcessedBool(false);
 		userNotif.setUser(rentalHeader.getUserId());
 		userNotif.setBookActionPerformedOn(rentalHeader.getRentalDetail().getBookOwner());
 		userNotificationDao.save(userNotif);

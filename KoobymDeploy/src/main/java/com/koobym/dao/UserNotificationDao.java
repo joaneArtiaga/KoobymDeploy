@@ -13,4 +13,5 @@ public interface UserNotificationDao extends BaseDao<UserNotification, Long> {
 	public UserNotification updateRentalExtraMessage(long userNotificationId);
 	public UserNotification updateSwapExtraMessage(long userNotificationId);
 	public int getCountNotRead(long userId);
+	public void notificationIsProcessed(long userNotificationId);
 }

@@ -59,6 +59,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		un.setActionId(rentalHeaderId);
 		un.setActionName("rental");
 		un.setActionStatus("return");
+		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(ah.getRentalDetail().getBookOwner());
 		un.setUserPerformer(ah.getUserId());
 		un.setUser(ah.getRentalDetail().getBookOwner().getUser());
@@ -507,6 +508,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		un.setActionId(rentalHeaderId);
 		un.setActionName("rental");
 		un.setActionStatus("returned");
+		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
 		un.setExtraMessage(String.valueOf(bookRatingId) + ", " + String.valueOf(bookReviewId));
 		un.setUser(rh.getRentalDetail().getBookOwner().getUser());
@@ -536,6 +538,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		un.setExtraMessage(String.valueOf(userRatingId));
 		un.setActionName("rental");
 		un.setActionStatus("Complete");
+		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
 		un.setUser(rh.getUserId());
 		un.setUserPerformer(rh.getRentalDetail().getBookOwner().getUser());
@@ -561,6 +564,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		UserNotification un = new UserNotification();
 		un.setActionId(rentalHeaderId);
 		un.setActionName("rental");
+		un.setProcessedBool(false);
 		un.setActionStatus("delivered");
 		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
 		un.setUser(rh.getUserId());
@@ -587,6 +591,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		un.setActionId(rentalHeaderId);
 		un.setActionName("rental");
 		un.setActionStatus("received");
+		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
 		un.setUser(rh.getRentalDetail().getBookOwner().getUser());
 		un.setUserPerformer(rh.getUserId());
@@ -608,6 +613,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		rh.getRentalDetail().getBookOwner().setStatus("none");
 
 		UserNotification un = new UserNotification();
+		un.setProcessedBool(false);
 		un.setActionId(rentalHeaderId);
 		un.setActionName("rental");
 		un.setActionStatus("Complete");
@@ -665,6 +671,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
 		un.setUser(rh.getUserId());
 		un.setUserPerformer(rd.getBookOwner().getUser());
+		un.setProcessedBool(false);
 		userNotificationDao.save(un);
 		pusherServer.sendNotification(un);
 
@@ -688,6 +695,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 				userN.setActionId(rentalHeaderId);
 				userN.setActionName("rental");
 				userN.setActionStatus("Rejected");
+				userN.setProcessedBool(false);
 				userN.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
 				userN.setUser(rh.getUserId());
 				userN.setUserPerformer(rd.getBookOwner().getUser());
@@ -729,6 +737,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		un.setActionId(rentalHeaderId);
 		un.setActionName("rental");
 		un.setActionStatus("Confirm");
+		un.setProcessedBool(false);
 		un.setUser(rh.getRentalDetail().getBookOwner().getUser());
 		un.setUserPerformer(rh.getUserId());
 		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
