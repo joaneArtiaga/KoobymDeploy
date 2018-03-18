@@ -147,6 +147,8 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Received"),
 				Restrictions.eq("status", "Confirm"), Restrictions.eq("status", "Delivered")));
 		criteria = criteria.addOrder(Order.desc("dateDeliver"));
+		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Returned"), 
+				Restrictions.eq("status", "Delivered"), Restrictions.eq("status", null)));
 		criteria = criteria.add(Restrictions.eq("user.userId", new Long(userId)));
 		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		flag = (List<RentalHeader>) criteria.list();
@@ -581,6 +583,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		rh = get(rentalHeaderId);
 
 		rh.setStatus("Received");
+		rh.setRentalExtraMessage("Return");
 		rh.getRentalDetail().setRentalStatus("Not Available");
 		rh.getRentalDetail().getBookOwner().setBookStat("Not Available");
 
