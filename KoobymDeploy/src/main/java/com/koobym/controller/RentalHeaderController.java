@@ -274,4 +274,10 @@ public class RentalHeaderController {
 		ResponseEntity<Boolean> flag = ResponseEntity.ok(rentalHeaderService.canRent(userId));
 		return flag;
 	}
+	
+	@RequestMapping(value = "/complete/{rentalHeaderId}/{userRatingId]", method = RequestMethod.GET)
+	public ResponseEntity<RentalHeader> complete(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("userRatingId") long userRatingId) {
+		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.complete(rentalHeaderId, userRatingId));
+		return flag;
+	}
 }

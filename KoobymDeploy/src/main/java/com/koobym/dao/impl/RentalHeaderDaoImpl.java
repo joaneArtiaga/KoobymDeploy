@@ -147,8 +147,6 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Received"),
 				Restrictions.eq("status", "Confirm"), Restrictions.eq("status", "Delivered")));
 		criteria = criteria.addOrder(Order.desc("dateDeliver"));
-		criteria = criteria.add(Restrictions.ne("rentalExtraMessage", "Return"));
-		criteria = criteria.add(Restrictions.ne("status", "Received"));
 		criteria = criteria.add(Restrictions.eq("user.userId", new Long(userId)));	
 		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		flag = (List<RentalHeader>) criteria.list();
@@ -580,13 +578,14 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 	public RentalHeader received(long rentalHeaderId) {
 		RentalHeader rh = new RentalHeader();
 
+		User user = new User();
 		rh = get(rentalHeaderId);
 
 		rh.setStatus("Received");
 		rh.setRentalExtraMessage("Return");
 		rh.getRentalDetail().setRentalStatus("Not Available");
 		rh.getRentalDetail().getBookOwner().setBookStat("Not Available");
-
+		
 		Session session = getSessionFactory().getCurrentSession();
 		session.update(rh);
 
@@ -612,8 +611,8 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 
 		rh.setStatus("Complete");
 		rh.getRentalDetail().setRentalStatus("Not Available");
-		rh.getRentalDetail().getBookOwner().setBookStat("Not Available");
-		rh.getRentalDetail().getBookOwner().setStatus("none");
+		rh.getRentalDetail().getBookOwner().setBookStat("Available");
+		rh.getRentalDetail().getBookOwner().setStatus("Rent");
 
 		UserNotification un = new UserNotification();
 		un.setProcessedBool(false);
