@@ -198,8 +198,8 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 		un.setActionStatus("Complete");
 		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(ah.getAuctionDetail().getBookOwner());
-		un.setUserPerformer(ah.getAuctionDetail().getBookOwner().getUser());
-		un.setUser(ah.getUser());
+		un.setUser(ah.getAuctionDetail().getBookOwner().getUser());
+		un.setUserPerformer(ah.getUser());
 		un.setExtraMessage(String.valueOf(userRatingId));
 
 		ah.setUser(ah.getAuctionDetail().getBookOwner().getUser());
