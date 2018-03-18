@@ -191,12 +191,6 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 
 		ah = get(auctionHeaderId);
 		user = ah.getUser();
-		ah.setUser(ah.getAuctionDetail().getBookOwner().getUser());
-		ah.setStatus("Complete");
-		ah.getAuctionDetail().getBookOwner().setUser(user);
-
-		Session session = getSessionFactory().getCurrentSession();
-		session.update(ah);
 
 		UserNotification un = new UserNotification();
 		un.setActionId(auctionHeaderId);
@@ -204,9 +198,16 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 		un.setActionStatus("Complete");
 		un.setProcessedBool(false);
 		un.setBookActionPerformedOn(ah.getAuctionDetail().getBookOwner());
-		un.setUser(ah.getAuctionDetail().getBookOwner().getUser());
-		un.setUserPerformer(ah.getUser());
+		un.setUserPerformer(ah.getAuctionDetail().getBookOwner().getUser());
+		un.setUser(ah.getUser());
 		un.setExtraMessage(String.valueOf(userRatingId));
+
+		ah.setUser(ah.getAuctionDetail().getBookOwner().getUser());
+		ah.setStatus("Complete");
+		ah.getAuctionDetail().getBookOwner().setUser(user);
+
+		Session session = getSessionFactory().getCurrentSession();
+		session.update(ah);
 
 		userNotificationDao.save(un);
 		pusherServer.sendNotification(un);
