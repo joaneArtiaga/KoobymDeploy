@@ -303,6 +303,7 @@ public class BookOwnerDaoImpl extends BaseDaoImpl<BookOwner, Long> implements Bo
 
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(BookOwner.class);
 		criteria = criteria.createAlias("book", "book");
+		criteria = criteria.add(Restrictions.eq("bookStat", "Available"));
 		criteria = criteria.add(Restrictions.like("book.bookTitle", searchKey));
 		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		flag = (List<BookOwner>) criteria.list();
