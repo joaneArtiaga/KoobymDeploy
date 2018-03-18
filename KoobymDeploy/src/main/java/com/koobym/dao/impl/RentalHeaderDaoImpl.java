@@ -733,18 +733,6 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		rh.setStatus("Confirm");
 		rh.getRentalDetail().getBookOwner().setBookStat("Not Available");
 
-		UserNotification un = new UserNotification();
-		un.setActionId(rentalHeaderId);
-		un.setActionName("rental");
-		un.setActionStatus("Confirm");
-		un.setProcessedBool(false);
-		un.setUser(rh.getRentalDetail().getBookOwner().getUser());
-		un.setUserPerformer(rh.getUserId());
-		un.setBookActionPerformedOn(rh.getRentalDetail().getBookOwner());
-
-		userNotificationDao.save(un);
-		pusherServer.sendNotification(un);
-
 		Session session = getSessionFactory().getCurrentSession();
 		session.update(rh);
 
