@@ -96,6 +96,19 @@ public class BookOwnerController {
 		return flag;
 	}
 
+	@RequestMapping(value = "/suggestedBooksMerged/{userId}", method = RequestMethod.GET)
+	public ResponseEntity<List<BookOwner>> suggestedBooksMerged(@PathVariable("userId") int userId) {
+		ResponseEntity<List<BookOwner>> flag = ResponseEntity.ok(bookOwnerService.mergedSuggested(userId));
+		return flag;
+	}
+
+	@RequestMapping(value = "/suggestedBooksByUserSimilarity/{userId}", method = RequestMethod.GET)
+	public ResponseEntity<List<BookOwner>> suggestedBooksByUserSimilarity(@PathVariable("userId") int userId) {
+		ResponseEntity<List<BookOwner>> flag = ResponseEntity
+				.ok(bookOwnerService.getRecommendationByUserSimilarity(userId));
+		return flag;
+	}
+
 	@RequestMapping(value = "/searchByGenre/{genre}", method = RequestMethod.GET)
 	public ResponseEntity<List<BookOwner>> searchByGenre(@PathVariable("genre") String genre) {
 		ResponseEntity<List<BookOwner>> flag = ResponseEntity.ok(bookOwnerService.searchByGenre(genre));

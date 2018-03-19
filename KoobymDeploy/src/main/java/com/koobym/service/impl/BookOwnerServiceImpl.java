@@ -1,6 +1,11 @@
 package com.koobym.service.impl;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,8 +23,10 @@ import com.koobym.dao.UserDao;
 import com.koobym.dto.BookActivityObject;
 import com.koobym.dto.Transaction;
 import com.koobym.model.BookOwner;
+import com.koobym.model.Genre;
 import com.koobym.model.RentalHeader;
 import com.koobym.model.SwapHeader;
+import com.koobym.model.User;
 import com.koobym.service.BookOwnerRatingService;
 import com.koobym.service.BookOwnerService;
 
@@ -113,7 +120,138 @@ public class BookOwnerServiceImpl extends BaseServiceImpl<BookOwner, Long> imple
 				toReturn.add(flag);
 			}
 		}
+
 		return toReturn;
+	}
+
+	public List<BookOwner> getRecommendationByUserSimilarity(int userId) {
+		List<BookOwner> flag = bookOwnerDao.allDistinctAvailable(userId);
+		for (BookOwner bo : flag) {
+			bo.setRate(bookOwnerRatingService.averageRatingOfBookOwner(bo.getBook_ownerId()));
+		}
+		performRecommendation(userId, flag);
+		sortByWeight(flag);
+		return flag;
+	}
+
+	public void performRecommendation(int userId, List<BookOwner> books) {
+		User user = userDao.get(new Long(userId));
+		for (BookOwner bo : books) {
+			int genreMatch = genreMatches(user, bo.getUser());
+			double weight = weightCalculation(getAge(bo.getUser().getBirthdate()), genreMatch,
+					getAge(user.getBirthdate()), user.getGenres().size());
+			bo.setWeight(weight);
+		}
+	}
+
+	private void sortByWeight(List<BookOwner> bo) {
+		Collections.sort(bo, new Comparator<BookOwner>() {
+
+			@Override
+			public int compare(BookOwner o1, BookOwner o2) {
+				int flag = 0;
+				if (o1.getWeight() > o2.getWeight()) {
+					flag = 1;
+				} else if (o1.getWeight() < o2.getWeight()) {
+					flag = -1;
+				} else {
+					if (o1.getRate() < o2.getRate()) {
+						flag = -1;
+					} else if (o1.getRate() > o2.getRate()) {
+						flag = 1;
+					}
+				}
+				return flag;
+			}
+		});
+	}
+
+	private double weightCalculation(int userMatcherAge, int genreMatch, int userAge, int userGenres) {
+		double flag = 0;
+
+		double agePow = Math.pow(userAge - userMatcherAge, 2);
+		double genrePow = Math.pow(genreMatch - userGenres, 2);
+		flag = Math.sqrt(agePow + genrePow);
+
+		System.out.println("bullcrap\t" + agePow + "\t" + genrePow + "\t" + flag);
+
+		return flag;
+	}
+
+	private int getAge(String birthday) {
+		int flag = 0;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate ld = LocalDate.parse(birthday, formatter);
+		LocalDate now = LocalDate.now();
+		flag = Period.between(ld, now).getYears();
+
+		return flag;
+	}
+
+	private int genreMatches(User user1, User user2) {
+		int flag = 0;
+
+		for (Genre g1 : user1.getGenres()) {
+			for (Genre g2 : user2.getGenres()) {
+				if (g1.getGenreId() == g2.getGenreId()) {
+					flag++;
+				}
+			}
+		}
+
+		return flag;
+	}
+
+	private int genreMatchesBook(User user, BookOwner book) {
+		int flag = 0;
+
+		for (Genre g1 : user.getGenres()) {
+			for (Genre g2 : book.getBook().getGenres()) {
+				if (g1.getGenreId() == g2.getGenreId()) {
+					flag++;
+				}
+			}
+		}
+
+		return flag;
+	}
+
+	public List<BookOwner> mergedSuggested(int userId) {
+		List<BookOwner> flags = bookOwnerDao.allDistinctAvailable(userId);
+
+		for (BookOwner bo : flags) {
+			bo.setRate(bookOwnerRatingService.averageRatingOfBookOwner(bo.getBook_ownerId()));
+		}
+
+		performRecommendationMerged(userId, flags);
+		sortByWeight(flags);
+
+		return flags;
+	}
+
+	public void performRecommendationMerged(int userId, List<BookOwner> books) {
+		User user = userDao.get(new Long(userId));
+		for (BookOwner bo : books) {
+			int genreMatch = genreMatches(user, bo.getUser());
+			int genreMatchesBooks = genreMatchesBook(user, bo);
+			double weight = weightCalculationMerged(getAge(bo.getUser().getBirthdate()), genreMatch, genreMatchesBooks,
+					getAge(user.getBirthdate()), user.getGenres().size());
+			bo.setWeight(weight);
+		}
+	}
+
+	private double weightCalculationMerged(int userMatcherAge, int userGenreMatch, int bookGenreMatch, int userAge,
+			int userGenres) {
+		double flag = 0;
+
+		double agePow = Math.pow(userAge - userMatcherAge, 2);
+		double genrePow = Math.pow(userGenreMatch - userGenres, 2);
+		double bookGenrePow = Math.pow(bookGenreMatch - userGenres, 2);
+		flag = Math.sqrt(agePow + genrePow + bookGenrePow);
+
+		System.out.println("bullcrap\t" + agePow + "\t" + genrePow + "\t" + bookGenrePow + "\t" + flag);
+
+		return flag;
 	}
 
 	public List<BookOwner> searchByGenre(String genre) {

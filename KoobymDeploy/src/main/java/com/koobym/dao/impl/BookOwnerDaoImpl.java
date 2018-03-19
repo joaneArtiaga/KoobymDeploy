@@ -85,15 +85,28 @@ public class BookOwnerDaoImpl extends BaseDaoImpl<BookOwner, Long> implements Bo
 		return flag;
 	}
 
+	public List<BookOwner> allDistinctAvailable(int userId) {
+		List<BookOwner> flag = new ArrayList<BookOwner>();
+
+		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(BookOwner.class);
+		criteria = criteria.createAlias("user", "user");
+		criteria = criteria.add(Restrictions.eq("bookStat", "Available"));
+		criteria = criteria.add(Restrictions.ne("user.userId", new Long(userId)));
+		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+		flag = (List<BookOwner>) criteria.list();
+		return flag;
+	}
+
 	public List<BookOwner> suggestedBooks(int userId) {
 		List<BookOwner> flag = new ArrayList<BookOwner>();
 		Session session = getSessionFactory().getCurrentSession();
-		String squery = "select * from book_owner join (SELECT bookId as bi, count(genre_bookId) "
+		String squery = "select * from book_owner join (SELECT bookId as bi, count(genre_bookId) as matches "
 				+ " FROM genre_book JOIN genre_user ON genre_book.genreId = genre_user.genreId  WHERE genre_user.userId = :userId"
 				+ " GROUP BY bookId ORDER BY 2 desc) as suggested_books on book_owner.bookId = suggested_books.bi"
 				+ " LEFT JOIN (select avg(rate.rateNumber) as rate, book_owner_rating.book_ownerId as boi from rate"
 				+ " JOIN book_owner_rating on rate.rateId = book_owner_rating.rateId group by"
-				+ " book_owner_rating.book_ownerId) as ratings on ratings.boi = book_owner.book_ownerId where userId != :userId "
+				+ " book_owner_rating.book_ownerId) as ratings on ratings.boi = book_owner.book_ownerId where book_owner.userId != :userId "
 				+ " and book_owner.bookStat = 'Available' order by rate desc";
 
 		SQLQuery query = session.createSQLQuery(squery);
@@ -108,28 +121,33 @@ public class BookOwnerDaoImpl extends BaseDaoImpl<BookOwner, Long> implements Bo
 			temp = new BookOwner();
 
 			temp.setBook_OwnerId((int) row.get("book_ownerId"));
-			if (isCurrentlyAvailableForRent(temp.getBook_OwnerId())) {
-				temp.setBook(new Book());
-				temp.getBook().setBookId((int) row.get("bookId"));
-				Hibernate.initialize(temp.getBook());
-				temp.setUser(new User());
-				temp.getUser().setUserId((int) row.get("userId"));
-				Hibernate.initialize(temp.getUser());
-				temp.setStatusDescription((String) row.get("statusDescription"));
-				Date dateBought = (Date) row.get("dateBought");
-				if (dateBought != null) {
-					temp.setDateBought(format.format(new java.util.Date(dateBought.getTime())));
-				}
-				temp.setNoRenters((int) row.get("noRenters"));
-				temp.setStatus((String) row.get("status"));
-				Double rate = (Double) row.get("rate");
-				if (rate != null) {
-					temp.setRate(rate);
-				} else {
-					temp.setRate(0);
-				}
-				flag.add(temp);
+			temp.setBook(new Book());
+			temp.getBook().setBookId((int) row.get("bookId"));
+			Hibernate.initialize(temp.getBook());
+			temp.setUser(new User());
+			temp.getUser().setUserId((int) row.get("userId"));
+			Hibernate.initialize(temp.getUser());
+			temp.setStatusDescription((String) row.get("statusDescription"));
+			Date dateBought = (Date) row.get("dateBought");
+			if (dateBought != null) {
+				temp.setDateBought(format.format(new java.util.Date(dateBought.getTime())));
 			}
+			temp.setNoRenters((int) row.get("noRenters"));
+			temp.setStatus((String) row.get("status"));
+			Double rate = (Double) row.get("rate");
+			if (rate != null) {
+				temp.setRate(rate);
+			} else {
+				temp.setRate(0);
+			}
+			BigInteger matches = (BigInteger) row.get("matches");
+			if (matches != null) {
+				temp.setMatches(matches.intValue());
+			} else {
+				temp.setMatches(0);
+			}
+			flag.add(temp);
+
 		}
 		return flag;
 	}
@@ -156,28 +174,28 @@ public class BookOwnerDaoImpl extends BaseDaoImpl<BookOwner, Long> implements Bo
 			temp = new BookOwner();
 
 			temp.setBook_OwnerId((int) row.get("book_ownerId"));
-			if (isCurrentlyAvailableForRent(temp.getBook_OwnerId())) {
-				temp.setBook(new Book());
-				temp.getBook().setBookId((int) row.get("bookId"));
-				Hibernate.initialize(temp.getBook());
-				temp.setUser(new User());
-				temp.getUser().setUserId((int) row.get("userId"));
-				Hibernate.initialize(temp.getUser());
-				temp.setStatusDescription((String) row.get("statusDescription"));
-				Date dateBought = (Date) row.get("dateBought");
-				if (dateBought != null) {
-					temp.setDateBought(format.format(new java.util.Date(dateBought.getTime())));
-				}
-				temp.setNoRenters((int) row.get("noRenters"));
-				temp.setStatus((String) row.get("status"));
-				Double rate = (Double) row.get("rate");
-				if (rate != null) {
-					temp.setRate(rate);
-				} else {
-					temp.setRate(0);
-				}
-				flag.add(temp);
+
+			temp.setBook(new Book());
+			temp.getBook().setBookId((int) row.get("bookId"));
+			Hibernate.initialize(temp.getBook());
+			temp.setUser(new User());
+			temp.getUser().setUserId((int) row.get("userId"));
+			Hibernate.initialize(temp.getUser());
+			temp.setStatusDescription((String) row.get("statusDescription"));
+			Date dateBought = (Date) row.get("dateBought");
+			if (dateBought != null) {
+				temp.setDateBought(format.format(new java.util.Date(dateBought.getTime())));
 			}
+			temp.setNoRenters((int) row.get("noRenters"));
+			temp.setStatus((String) row.get("status"));
+			Double rate = (Double) row.get("rate");
+			if (rate != null) {
+				temp.setRate(rate);
+			} else {
+				temp.setRate(0);
+			}
+			flag.add(temp);
+
 		}
 		return flag;
 	}
@@ -203,28 +221,27 @@ public class BookOwnerDaoImpl extends BaseDaoImpl<BookOwner, Long> implements Bo
 			temp = new BookOwner();
 
 			temp.setBook_OwnerId((int) row.get("book_ownerId"));
-			if (isCurrentlyAvailableForRent(temp.getBook_OwnerId())) {
-				temp.setBook(new Book());
-				temp.getBook().setBookId((int) row.get("bookId"));
-				Hibernate.initialize(temp.getBook());
-				temp.setUser(new User());
-				temp.getUser().setUserId((int) row.get("userId"));
-				Hibernate.initialize(temp.getUser());
-				temp.setStatusDescription((String) row.get("statusDescription"));
-				Date dateBought = (Date) row.get("dateBought");
-				if (dateBought != null) {
-					temp.setDateBought(format.format(new java.util.Date(dateBought.getTime())));
-				}
-				temp.setNoRenters((int) row.get("noRenters"));
-				temp.setStatus((String) row.get("status"));
-				Double rate = (Double) row.get("rate");
-				if (rate != null) {
-					temp.setRate(rate);
-				} else {
-					temp.setRate(0);
-				}
-				flag.add(temp);
+
+			temp.setBook(new Book());
+			temp.getBook().setBookId((int) row.get("bookId"));
+			Hibernate.initialize(temp.getBook());
+			temp.setUser(new User());
+			temp.getUser().setUserId((int) row.get("userId"));
+			Hibernate.initialize(temp.getUser());
+			temp.setStatusDescription((String) row.get("statusDescription"));
+			Date dateBought = (Date) row.get("dateBought");
+			if (dateBought != null) {
+				temp.setDateBought(format.format(new java.util.Date(dateBought.getTime())));
 			}
+			temp.setNoRenters((int) row.get("noRenters"));
+			temp.setStatus((String) row.get("status"));
+			Double rate = (Double) row.get("rate");
+			if (rate != null) {
+				temp.setRate(rate);
+			} else {
+				temp.setRate(0);
+			}
+			flag.add(temp);
 		}
 		return flag;
 	}

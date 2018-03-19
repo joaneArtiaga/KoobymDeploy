@@ -25,6 +25,8 @@ public interface BookOwnerDao extends BaseDao<BookOwner, Long> {
 	public List<BookOwner> searchByGenre(String genre);
 
 	public List<BookOwner> searchByAuthor(String author);
-	
+
 	public List<BookOwner> searchByUserOwner(String userOwnerName);
+
+	public List<BookOwner> allDistinctAvailable(int userId);
 }

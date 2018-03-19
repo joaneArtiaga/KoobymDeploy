@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 @Entity
 @Table(name = "book_owner")
 public class BookOwner {
@@ -46,6 +48,29 @@ public class BookOwner {
 
 	@Transient
 	private double rate;
+
+	@Transient
+	@JsonInclude
+	private double weight;
+
+	@Transient
+	private int matches;
+
+	public int getMatches() {
+		return matches;
+	}
+
+	public void setMatches(int matches) {
+		this.matches = matches;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
 
 	public String getBookStat() {
 		return bookStat;

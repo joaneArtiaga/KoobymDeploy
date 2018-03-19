@@ -29,8 +29,12 @@ public interface BookOwnerService extends BaseService<BookOwner, Long> {
 	public List<BookOwner> searchByAuthor(String author);
 
 	public List<BookOwner> searchByGenre(String genre);
-	
+
 	public List<BookOwner> searchByUserOwner(String userOwnerName);
 
 	public Set<BookActivityObject> getUserOwnBookActivities(int userId);
+
+	public List<BookOwner> getRecommendationByUserSimilarity(int userId);
+
+	public List<BookOwner> mergedSuggested(int userId);
 }
