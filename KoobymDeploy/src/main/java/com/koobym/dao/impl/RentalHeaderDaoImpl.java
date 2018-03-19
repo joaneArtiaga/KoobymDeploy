@@ -758,10 +758,9 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		RentalHeader flag = new RentalHeader();
 
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(RentalHeader.class);
-		criteria = criteria.add(Restrictions.eq("rentalDetail", "rentalDetail"));
-		criteria = criteria.add(Restrictions.eq("rentalDetail.rental_detailId", rentalDetailId));
-		criteria = criteria
-				.add(Restrictions.or(Restrictions.ne("status", "Complete"), Restrictions.ne("status", "Rejected")));
+//		criteria = criteria.add(Restrictions.eq("rentalDetail", "rentalDetail"));
+		criteria = criteria.add(Restrictions.eq("rentalDetail.rental_detailId", new Long(rentalDetailId)));
+		criteria = criteria.add(Restrictions.or(Restrictions.ne("status", "Complete"), Restrictions.ne("status", "Rejected")));
 		flag = (RentalHeader) criteria.uniqueResult();
 		return flag;
 	}
