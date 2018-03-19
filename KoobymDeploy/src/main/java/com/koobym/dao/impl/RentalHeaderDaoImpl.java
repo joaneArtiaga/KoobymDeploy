@@ -179,7 +179,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(RentalHeader.class);
 		criteria = criteria.createAlias("user", "user");
 		criteria = criteria.add(Restrictions.eq("user.userId", new Long(userId)));
-		criteria = criteria.add(Restrictions.and(Restrictions.eq("status", "Received"),
+		criteria = criteria.add(Restrictions.and(Restrictions.or(Restrictions.eq("status", "Received"), Restrictions.eq("status", "Delivered")),
 				Restrictions.eq("rentalExtraMessage", "Delivered")));
 		criteria = criteria.addOrder(Order.desc("rentalEndDate"));
 		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
