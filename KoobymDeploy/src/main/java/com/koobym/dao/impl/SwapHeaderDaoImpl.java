@@ -16,6 +16,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.koobym.dao.BookOwnerDao;
+import com.koobym.dao.SwapDetailDao;
 import com.koobym.dao.SwapHeaderDao;
 import com.koobym.dao.UserNotificationDao;
 import com.koobym.model.BookOwner;
@@ -33,6 +35,12 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 	@Autowired
 	private UserNotificationDao userNotificationDao;
 
+	@Autowired
+	private SwapDetailDao swapDetailDao;
+	
+	@Autowired
+	private BookOwnerDao bookOwnerDao;
+	
 	@Autowired
 	private PusherServer pusherServer;
 
@@ -415,31 +423,35 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 		List<SwapDetail> requestorSwapDetail = new ArrayList<>();
 		List<SwapDetail> requesteeSwapDetail = new ArrayList<>();
 
-		for (SwapHeaderDetail shd : sh.getSwapHeaderDetails()) {
+		for(SwapHeaderDetail shd : sh.getSwapHeaderDetails()){
 			if ("Requestor".equals(shd.getSwapType())) {
 				requestorSwapDetail.add(shd.getSwapDetail());
 			} else if ("Requestee".equals(shd.getSwapType())) {
 				requesteeSwapDetail.add(shd.getSwapDetail());
 			}
 		}
-
+		
 		mySwapDetail = sh.getRequestedSwapDetail();
 		toBeSwapped = sh.getSwapDetail();
 		requestor = mySwapDetail.getBookOwner().getUser();
 		requestee = toBeSwapped.getBookOwner().getUser();
 
-		for (SwapDetail sd : requestorSwapDetail) {
+		for(SwapDetail sd : requestorSwapDetail){
 			sd.getBookOwner().setUser(requestee);
 			sd.setSwapStatus("Not Available");
 			sd.getBookOwner().setBookStat("Not Available");
-			session.update(sd);
+			sd.getBookOwner().setStatus("none");
+			bookOwnerDao.update(sd.getBookOwner());
+			swapDetailDao.update(sd);
 		}
-
+		
 		for (SwapDetail sd : requesteeSwapDetail) {
 			sd.getBookOwner().setUser(requestor);
 			sd.setSwapStatus("Not Available");
 			sd.getBookOwner().setBookStat("Not Available");
-			session.update(sd);
+			sd.getBookOwner().setStatus("none");
+			bookOwnerDao.update(sd.getBookOwner());
+			swapDetailDao.update(sd);
 		}
 
 		sh.setSwapDetail(toBeSwapped);
