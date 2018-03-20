@@ -48,25 +48,25 @@ public interface RentalHeaderService extends BaseService<RentalHeader, Long> {
 
 	public RentalHeader setMeetUp(long rentalHeaderId, long meetUpId);
 
-	public RentalHeader setReturnMeetUp(long rentalHeaderId, long meetUpId);
+	public RentalHeader setReturnMeetUp(long rentalHeaderId, long meetUpId, String currDate);
 
-	public RentalHeader setReturnToReceive(long rentalHeaderId, long bookRatingId, long bookReviewId);
+	public RentalHeader setReturnToReceive(long rentalHeaderId, long bookRatingId, long bookReviewId, String currDate);
 
-	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId);
+	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId, String currDate );
 
-	public RentalHeader delivered(long rentalHeaderId);
+	public RentalHeader delivered(long rentalHeaderId, String currDate);
 
-	public RentalHeader received(long rentalHeaderId);
+	public RentalHeader received(long rentalHeaderId, String currDate);
 
-	public RentalHeader complete(long rentalHeaderId, long userRatingId);
+	public RentalHeader complete(long rentalHeaderId, long userRatingId, String currDate);
 
 	public List<RentalHeader> allHistory(long userId);
 
-	public RentalHeader acceptRequest(long rentalHeaderId);
+	public RentalHeader acceptRequest(long rentalHeaderId, String currDate);
 
-	public RentalHeader rejectRequest(long rentalHeaderId);
+	public RentalHeader rejectRequest(long rentalHeaderId, String currDate);
 
-	public RentalHeader setConfirm(long rentalHeaderId, long meetUpDeliveryId, long meetUpReturnId);
+	public RentalHeader setConfirm(long rentalHeaderId, long meetUpDeliveryId, long meetUpReturnId, String currDate);
 
 	public RentalHeader getLatestRenter(long rentalDetailId);
 

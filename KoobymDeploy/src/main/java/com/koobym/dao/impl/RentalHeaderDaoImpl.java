@@ -44,16 +44,10 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		super(RentalHeader.class);
 	}
 
-	public RentalHeader setReturnMeetUp(long rentalHeaderId, long meetUpId) {
+	public RentalHeader setReturnMeetUp(long rentalHeaderId, long meetUpId, String currDate) {
 		RentalHeader ah = new RentalHeader();
 		MeetUp mu = new MeetUp();
 
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
-		String currDate = df.format(cal.getTime());
-		
-		
 		ah = get(rentalHeaderId);
 		mu = meetUpDao.get(meetUpId);
 
@@ -508,16 +502,10 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		query.executeUpdate();
 	}
 
-	public RentalHeader setReturnToReceive(long rentalHeaderId, long bookRatingId, long bookReviewId) {
+	public RentalHeader setReturnToReceive(long rentalHeaderId, long bookRatingId, long bookReviewId, String currDate) {
 		RentalHeader rh = new RentalHeader();
 
 		rh = get(rentalHeaderId);
-
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
-		String currDate = df.format(cal.getTime());
-		
 
 		rh.setStatus("Received");
 		rh.setRentalExtraMessage("Returned");
@@ -542,13 +530,8 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		return rh;
 	}
 
-	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId) {
+	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId, String currDate) {
 		RentalHeader rh = new RentalHeader();
-
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
-		String currDate = df.format(cal.getTime());
 
 		
 		rh = get(rentalHeaderId);
@@ -575,17 +558,12 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		return rh;
 	}
 
-	public RentalHeader delivered(long rentalHeaderId) {
+	public RentalHeader delivered(long rentalHeaderId, String currDate) {
 		RentalHeader rh = new RentalHeader();
 
 		rh = get(rentalHeaderId);
 
-		Calendar cl = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String currdate = df.format(cl.getTime());
-		
-		
-		rh.setDateDeliver(currdate);
+		rh.setDateDeliver(currDate);
 		rh.setStatus("Delivered");
 		rh.setRentalExtraMessage("Delivered");
 		rh.getRentalDetail().setRentalStatus("Not Available");
@@ -608,17 +586,12 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		return rh;
 	}
 
-	public RentalHeader received(long rentalHeaderId) {
+	public RentalHeader received(long rentalHeaderId, String currDate) {
 		RentalHeader rh = new RentalHeader();
 
 		User user = new User();
 		rh = get(rentalHeaderId);
-
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		String currDate = df.format(cal.getTime());
-
 		rh.setDateReceived(currDate);
 		rh.setStatus("Received");
 		rh.setRentalExtraMessage("Return");
@@ -643,14 +616,8 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		return rh;
 	}
 
-	public RentalHeader complete(long rentalHeaderId, long userRatingId) {
+	public RentalHeader complete(long rentalHeaderId, long userRatingId, String currDate) {
 		RentalHeader rh = new RentalHeader();
-
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		
-		String currDate = df.format(cal.getTime());
-
 		
 		rh = get(rentalHeaderId);
 
@@ -696,7 +663,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 
 	}
 
-	public RentalHeader acceptRequest(long rentalHeaderId) {
+	public RentalHeader acceptRequest(long rentalHeaderId, String currDate) {
 		List<RentalHeader> flag = new ArrayList<RentalHeader>();
 
 		RentalHeader rh = new RentalHeader();
@@ -704,11 +671,6 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 
 		rh = get(rentalHeaderId);
 		rd = rh.getRentalDetail();
-
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		
-		String currDate = df.format(cal.getTime());
 
 		rh.setDateApproved(currDate);
 		rh.setStatus("Approved");
@@ -737,15 +699,12 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		flag = (List<RentalHeader>) criteria.list();
 
 		RentalHeader rentalHeaderTemp;
-		Calendar cal1 = Calendar.getInstance();
-		DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
-		String currDate1 = df1.format(cal1.getTime());
 		for (int i = 0; i < flag.size(); i++) {
 			rentalHeaderTemp = flag.get(i);
 
 			if (!(flag.get(i).equals(rentalHeaderId))) {
 				
-				rentalHeaderTemp.setDateRejected(currDate1);
+				rentalHeaderTemp.setDateRejected(currDate);
 				rentalHeaderTemp.setStatus("Rejected");
 				rentalHeaderTemp.setRentalExtraMessage("Accepted other request");
 				session.update(rentalHeaderTemp);
@@ -767,7 +726,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		return rh;
 	}
 
-	public RentalHeader setConfirm(long rentalHeaderId, long meetUpDeliveryId, long meetUpReturnId) {
+	public RentalHeader setConfirm(long rentalHeaderId, long meetUpDeliveryId, long meetUpReturnId, String currDate) {
 		RentalHeader rh = new RentalHeader();
 
 		MeetUp mu = meetUpDao.get(meetUpDeliveryId);
@@ -783,11 +742,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 
 		rh.setDateDeliver(rh.getMeetUp().getUserDayTime().getDays().getStrDay());
 
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date dateDate = new Date();
-		String formattedDate = format.format(dateDate);
-
-		rh.setDateConfirmed(formattedDate);
+		rh.setDateConfirmed(currDate);
 		rh.getRentalDetail().setRentalStatus("Not Available");
 		rh.setStatus("Confirm");
 		rh.getRentalDetail().getBookOwner().setBookStat("Not Available");
@@ -798,12 +753,8 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		return rh;
 	}
 
-	public RentalHeader rejectRequest(long rentalHeaderId) {
+	public RentalHeader rejectRequest(long rentalHeaderId, String currDate) {
 		RentalHeader rh = new RentalHeader();
-
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		String currDate = df.format(cal.getTime());
 		
 		rh = get(rentalHeaderId);
 

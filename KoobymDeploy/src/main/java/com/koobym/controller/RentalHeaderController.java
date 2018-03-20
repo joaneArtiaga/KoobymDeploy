@@ -190,9 +190,9 @@ public class RentalHeaderController {
 
 	@RequestMapping(value = "/setReturnById/{rentalHeaderId}/{meetUpId}", method = RequestMethod.GET)
 	public ResponseEntity<RentalHeader> setReturnById(@PathVariable("rentalHeaderId") long rentalHeaderId,
-			@PathVariable("meetUpId") long meetUpId) {
+			@PathVariable("meetUpId") long meetUpId, @PathVariable("currDate") String currDate) {
 		ResponseEntity<RentalHeader> flag = ResponseEntity
-				.ok(rentalHeaderService.setReturnMeetUp(rentalHeaderId, meetUpId));
+				.ok(rentalHeaderService.setReturnMeetUp(rentalHeaderId, meetUpId, currDate));
 		return flag;
 	}
 
@@ -202,31 +202,32 @@ public class RentalHeaderController {
 		return flag;
 	}
 
-	@RequestMapping(value = "/returnToReceive/{rentalHeaderId}/{bookRatingId}/{bookReviewId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/returnToReceive/{rentalHeaderId}/{bookRatingId}/{bookReviewId}/{currDate}", method = RequestMethod.GET)
 	public ResponseEntity<RentalHeader> returnToReceive(@PathVariable("rentalHeaderId") long rentalHeaderId,
-			@PathVariable("bookRatingId") long bookRatingId, @PathVariable("bookReviewId") long bookReviewId) {
+			@PathVariable("bookRatingId") long bookRatingId, @PathVariable("bookReviewId") long bookReviewId, @PathVariable("currDate") String currDate) {
 		ResponseEntity<RentalHeader> flag = ResponseEntity
-				.ok(rentalHeaderService.setReturnToReceive(rentalHeaderId, bookRatingId, bookReviewId));
+				.ok(rentalHeaderService.setReturnToReceive(rentalHeaderId, bookRatingId, bookReviewId, currDate));
 		return flag;
 	}
 
-	@RequestMapping(value = "/setToComplete/{rentalHeaderId}/{userRatingId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/setToComplete/{rentalHeaderId}/{userRatingId}.{currDate}", method = RequestMethod.GET)
 	public ResponseEntity<RentalHeader> setToComplete(@PathVariable("rentalHeaderId") long rentalHeaderId,
-			@PathVariable("userRatingId") long userRatingId) {
+			@PathVariable("userRatingId") long userRatingId, 
+			@PathVariable("currDate") String currDate) {
 		ResponseEntity<RentalHeader> flag = ResponseEntity
-				.ok(rentalHeaderService.setCompleteRental(rentalHeaderId, userRatingId));
+				.ok(rentalHeaderService.setCompleteRental(rentalHeaderId, userRatingId, currDate));
 		return flag;
 	}
 
-	@RequestMapping(value = "/delivered/{rentalHeaderId}", method = RequestMethod.GET)
-	public ResponseEntity<RentalHeader> delivereed(@PathVariable("rentalHeaderId") long rentalHeaderId) {
-		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.delivered(rentalHeaderId));
+	@RequestMapping(value = "/delivered/{rentalHeaderId}/{currDate}", method = RequestMethod.GET)
+	public ResponseEntity<RentalHeader> delivereed(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("currDate") String currDate) {
+		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.delivered(rentalHeaderId, currDate));
 		return flag;
 	}
 
-	@RequestMapping(value = "/received/{rentalHeaderId}", method = RequestMethod.GET)
-	public ResponseEntity<RentalHeader> received(@PathVariable("rentalHeaderId") long rentalHeaderId) {
-		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.received(rentalHeaderId));
+	@RequestMapping(value = "/received/{rentalHeaderId}/{currDate}", method = RequestMethod.GET)
+	public ResponseEntity<RentalHeader> received(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("currDate") String currDate) {
+		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.received(rentalHeaderId, currDate));
 		return flag;
 	}
 
@@ -236,24 +237,25 @@ public class RentalHeaderController {
 		return flag;
 	}
 
-	@RequestMapping(value = "/acceptRequest/{rentalHeaderId}", method = RequestMethod.GET)
-	public ResponseEntity<RentalHeader> acceptRequest(@PathVariable("rentalHeaderId") long rentalHeaderId) {
-		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.acceptRequest(rentalHeaderId));
+	@RequestMapping(value = "/acceptRequest/{rentalHeaderId}/{currDate}", method = RequestMethod.GET)
+	public ResponseEntity<RentalHeader> acceptRequest(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("currDate") String currDate) {
+		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.acceptRequest(rentalHeaderId, currDate));
 		return flag;
 	}
 
-	@RequestMapping(value = "/rejectRequest/{rentalHeaderId}", method = RequestMethod.GET)
-	public ResponseEntity<RentalHeader> rejectRequest(@PathVariable("rentalHeaderId") long rentalHeaderId) {
-		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.rejectRequest(rentalHeaderId));
+	@RequestMapping(value = "/rejectRequest/{rentalHeaderId}/{currDate}", method = RequestMethod.GET)
+	public ResponseEntity<RentalHeader> rejectRequest(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("currDate") String currDate) {
+		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.rejectRequest(rentalHeaderId, currDate));
 		return flag;
 	}
 
-	@RequestMapping(value = "/setConfirm/{rentalHeaderId}/{meetUpDeliveryId}/{meetUpReturnId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/setConfirm/{rentalHeaderId}/{meetUpDeliveryId}/{meetUpReturnId}/{currDate}", method = RequestMethod.GET)
 	public ResponseEntity<RentalHeader> setConfirm(@PathVariable("rentalHeaderId") long rentalHeaderId,
 			@PathVariable("meetUpDeliveryId") long meetUpDeliveryId,
-			@PathVariable("meetUpReturnId") long meetUpReturnId) {
+			@PathVariable("meetUpReturnId") long meetUpReturnId,
+			@PathVariable("currDate") String currDate) {
 		ResponseEntity<RentalHeader> flag = ResponseEntity
-				.ok(rentalHeaderService.setConfirm(rentalHeaderId, meetUpDeliveryId, meetUpReturnId));
+				.ok(rentalHeaderService.setConfirm(rentalHeaderId, meetUpDeliveryId, meetUpReturnId, currDate));
 		return flag;
 	}
 
@@ -275,9 +277,9 @@ public class RentalHeaderController {
 		return flag;
 	}
 	
-	@RequestMapping(value = "/complete/{rentalHeaderId}/{userRatingId}", method = RequestMethod.GET)
-	public ResponseEntity<RentalHeader> complete(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("userRatingId") long userRatingId) {
-		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.complete(rentalHeaderId, userRatingId));
+	@RequestMapping(value = "/complete/{rentalHeaderId}/{userRatingId}/{currDate}", method = RequestMethod.GET)
+	public ResponseEntity<RentalHeader> complete(@PathVariable("rentalHeaderId") long rentalHeaderId, @PathVariable("userRatingId") long userRatingId, @PathVariable("currDate") String currDate) {
+		ResponseEntity<RentalHeader> flag = ResponseEntity.ok(rentalHeaderService.complete(rentalHeaderId, userRatingId, currDate));
 		return flag;
 	}
 	

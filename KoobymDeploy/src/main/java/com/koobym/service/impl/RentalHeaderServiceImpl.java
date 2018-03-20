@@ -232,8 +232,8 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 	}
 
 	@Override
-	public RentalHeader setReturnMeetUp(long rentalHeaderId, long meetUpId) {
-		return rentalHeaderDao.setReturnMeetUp(rentalHeaderId, meetUpId);
+	public RentalHeader setReturnMeetUp(long rentalHeaderId, long meetUpId, String currDate) {
+		return rentalHeaderDao.setReturnMeetUp(rentalHeaderId, meetUpId, currDate);
 	}
 
 	@Override
@@ -242,28 +242,28 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 	}
 
 	@Override
-	public RentalHeader setReturnToReceive(long rentalHeaderId, long bookRatingId, long bookReviewId) {
-		return rentalHeaderDao.setReturnToReceive(rentalHeaderId, bookRatingId, bookReviewId);
+	public RentalHeader setReturnToReceive(long rentalHeaderId, long bookRatingId, long bookReviewId, String currDate) {
+		return rentalHeaderDao.setReturnToReceive(rentalHeaderId, bookRatingId, bookReviewId, currDate);
 	}
 
 	@Override
-	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId) {
-		return rentalHeaderDao.setCompleteRental(rentalHeaderId, userRatingId);
+	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId, String currDate) {
+		return rentalHeaderDao.setCompleteRental(rentalHeaderId, userRatingId, currDate);
 	}
 
 	@Override
-	public RentalHeader delivered(long rentalHeaderId) {
-		return rentalHeaderDao.delivered(rentalHeaderId);
+	public RentalHeader delivered(long rentalHeaderId, String currDate) {
+		return rentalHeaderDao.delivered(rentalHeaderId, currDate);
 	}
 
 	@Override
-	public RentalHeader received(long rentalHeaderId) {
-		return rentalHeaderDao.received(rentalHeaderId);
+	public RentalHeader received(long rentalHeaderId, String currDate) {
+		return rentalHeaderDao.received(rentalHeaderId, currDate);
 	}
 
 	@Override
-	public RentalHeader complete(long rentalHeaderId, long userRatingId) {
-		return rentalHeaderDao.complete(rentalHeaderId, userRatingId);
+	public RentalHeader complete(long rentalHeaderId, long userRatingId, String currDate) {
+		return rentalHeaderDao.complete(rentalHeaderId, userRatingId, currDate);
 	}
 
 	@Override
@@ -272,18 +272,18 @@ public class RentalHeaderServiceImpl extends BaseServiceImpl<RentalHeader, Long>
 	}
 
 	@Override
-	public RentalHeader acceptRequest(long rentalHeaderId) {
-		return rentalHeaderDao.acceptRequest(rentalHeaderId);
+	public RentalHeader acceptRequest(long rentalHeaderId, String currDate) {
+		return rentalHeaderDao.acceptRequest(rentalHeaderId, currDate);
 	}
 
 	@Override
-	public RentalHeader rejectRequest(long rentalHeaderId) {
-		return rentalHeaderDao.rejectRequest(rentalHeaderId);
+	public RentalHeader rejectRequest(long rentalHeaderId, String currDate) {
+		return rentalHeaderDao.rejectRequest(rentalHeaderId, currDate);
 	}
 
 	@Override
-	public RentalHeader setConfirm(long rentalHeaderId, long meetUpDeliveryId, long meetUpReturnId) {
-		return rentalHeaderDao.setConfirm(rentalHeaderId, meetUpDeliveryId, meetUpReturnId);
+	public RentalHeader setConfirm(long rentalHeaderId, long meetUpDeliveryId, long meetUpReturnId, String currDate) {
+		return rentalHeaderDao.setConfirm(rentalHeaderId, meetUpDeliveryId, meetUpReturnId, currDate);
 	}
 
 	@Override
