@@ -1,6 +1,7 @@
 package com.koobym.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.koobym.model.User;
+import com.koobym.model.UserDayTime;
 import com.koobym.service.UserService;
 
 @RestController
@@ -52,7 +54,9 @@ public class UserController {
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
 	public ResponseEntity<User> update(@RequestBody User user) {
 		ResponseEntity<User> ent = null;
+		Set<UserDayTime> userDayTimes = user.getUserDayTimes();
 		userService.update(user);
+		userService.updateUserDayTimes(user, userDayTimes);
 		if (user == null) {
 			ent = ResponseEntity.badRequest().body(null);
 		} else {

@@ -1,5 +1,6 @@
 package com.koobym.service.impl;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -37,8 +38,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 			for (UserDayTime udt : userDayTimes) {
 				udt.setUserId(userR.getUserId());
 				userDayTimeDao.saveOrUpdate(udt);
-			}					
-			
+			}
+
 		} catch (Exception e) {
 			userR = null;
 		}
@@ -47,18 +48,28 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
 
 	@Override
 	public void update(User user) {
-		User userR = null;
-		try {
-			Set<UserDayTime> userDayTimes = user.getUserDayTimes();
-			user.setUserDayTimes(null);
-			userDao.update(user);
-			for (UserDayTime udt : userDayTimes) {
-				udt.setUserId(user.getUserId());
-				userDayTimeDao.saveOrUpdate(udt);
+		user.setUserDayTimes(null);
+		userDao.update(user);
+	}
+
+	public void updateUserDayTimes(User user, Set<UserDayTime> userDayTimes) {
+		User userFromGet = get(user.getUserId());
+		Set<UserDayTime> udts = new HashSet<UserDayTime>();
+		Set<UserDayTime> originalUserDayTimes = userFromGet.getUserDayTimes();
+
+		if (originalUserDayTimes != null) {
+			for (UserDayTime udt : originalUserDayTimes) {
+				userDayTimeDao.delete(udt);
 			}
-		} catch (Exception e) {
-			userR = null;
 		}
+		if (userDayTimes != null) {
+			for (UserDayTime udt : userDayTimes) {
+				udt.setUserDayTimeId(0);
+				userDayTimeDao.saveOrUpdate(udt);
+				udts.add(udt);
+			}
+		}
+		user.setUserDayTimes(udts);
 	}
 
 	@Override

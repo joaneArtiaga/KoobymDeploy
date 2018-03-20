@@ -1,5 +1,6 @@
 package com.koobym.dao.impl;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -18,5 +19,14 @@ public class UserDayTimeDaoImpl extends BaseDaoImpl<UserDayTime, Long> implement
 		session.clear();
 		session.saveOrUpdate(userDayTime);
 		session.flush();
+	}
+	
+	@Override
+	public void delete(UserDayTime userDayTime) {
+		Session session = getSessionFactory().getCurrentSession();
+		String squery = "delete from user_day_time where userDayTimeId = :userDayTimeId";
+		SQLQuery query = session.createSQLQuery(squery);
+		query.setLong("userDayTimeId", userDayTime.getUserDayTimeId());
+		query.executeUpdate();
 	}
 }
