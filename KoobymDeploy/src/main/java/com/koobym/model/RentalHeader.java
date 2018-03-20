@@ -37,11 +37,17 @@ public class RentalHeader {
 	@Column(name = "dateApproved")
 	private String dateApproved;
 
+	@Column(name = "dateReceived")
+	private String dateReceived;
+	
 	@Column(name = "dateConfirmed")
 	private String dateConfirmed;
 
 	@Column(name = "dateRejected")
 	private String dateRejected;
+
+	@Column(name = "dateComplete")
+	private String dateComplete;
 
 	@Column(name = "dateDeliver")
 	private String dateDeliver;
@@ -76,6 +82,22 @@ public class RentalHeader {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "returnMeetUp")
 	private MeetUp returnMeetUp;
+	
+	public String getDateComplete(){
+		return dateComplete;
+	}
+	
+	public void setDateComplete(String dateComplete){
+		this.dateComplete = dateComplete;
+	}
+	
+	public String getDateReceived(){
+		return dateReceived;
+	}
+	
+	public void setDateReceived(String dateReceived){
+		this.dateReceived = dateReceived;
+	}
 	
 	public String getDateRejected(){
 		return dateRejected;

@@ -49,7 +49,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		MeetUp mu = new MeetUp();
 
 		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		String currDate = df.format(cal.getTime());
 		
@@ -513,9 +513,16 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 
 		rh = get(rentalHeaderId);
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String currDate = df.format(cal.getTime());
+		
+
 		rh.setStatus("Received");
 		rh.setRentalExtraMessage("Returned");
 
+		rh.setDateReceived(currDate);
 		UserNotification un = new UserNotification();
 
 		un.setActionId(rentalHeaderId);
@@ -538,11 +545,18 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 	public RentalHeader setCompleteRental(long rentalHeaderId, long userRatingId) {
 		RentalHeader rh = new RentalHeader();
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String currDate = df.format(cal.getTime());
+
+		
 		rh = get(rentalHeaderId);
 		rh.setStatus("Complete");
 		rh.getRentalDetail().setRentalStatus("Available");
 		rh.getRentalDetail().getBookOwner().setBookStat("Available");
-
+		rh.setRentalReturnDate(currDate);
+		
 		Session session = getSessionFactory().getCurrentSession();
 		session.update(rh);
 		UserNotification un = new UserNotification();
@@ -567,7 +581,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		rh = get(rentalHeaderId);
 
 		Calendar cl = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String currdate = df.format(cl.getTime());
 		
 		
@@ -600,6 +614,12 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		User user = new User();
 		rh = get(rentalHeaderId);
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String currDate = df.format(cal.getTime());
+
+		rh.setDateReceived(currDate);
 		rh.setStatus("Received");
 		rh.setRentalExtraMessage("Return");
 		rh.getRentalDetail().setRentalStatus("Not Available");
@@ -626,8 +646,15 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 	public RentalHeader complete(long rentalHeaderId, long userRatingId) {
 		RentalHeader rh = new RentalHeader();
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String currDate = df.format(cal.getTime());
+
+		
 		rh = get(rentalHeaderId);
 
+		rh.setDateComplete(currDate);
 		rh.setStatus("Complete");
 		rh.getRentalDetail().setRentalStatus("Not Available");
 		rh.getRentalDetail().getBookOwner().setBookStat("Available");
@@ -678,6 +705,12 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		rh = get(rentalHeaderId);
 		rd = rh.getRentalDetail();
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String currDate = df.format(cal.getTime());
+
+		rh.setDateApproved(currDate);
 		rh.setStatus("Approved");
 		rh.getRentalDetail().getBookOwner().setBookStat("Not Available");
 		rh.getRentalDetail().setRentalStatus("Not Available");
@@ -704,15 +737,15 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		flag = (List<RentalHeader>) criteria.list();
 
 		RentalHeader rentalHeaderTemp;
-		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		String currDate = df.format(cal.getTime());
+		Calendar cal1 = Calendar.getInstance();
+		DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+		String currDate1 = df1.format(cal1.getTime());
 		for (int i = 0; i < flag.size(); i++) {
 			rentalHeaderTemp = flag.get(i);
 
 			if (!(flag.get(i).equals(rentalHeaderId))) {
 				
-				rentalHeaderTemp.setDateRejected(currDate);
+				rentalHeaderTemp.setDateRejected(currDate1);
 				rentalHeaderTemp.setStatus("Rejected");
 				rentalHeaderTemp.setRentalExtraMessage("Accepted other request");
 				session.update(rentalHeaderTemp);
