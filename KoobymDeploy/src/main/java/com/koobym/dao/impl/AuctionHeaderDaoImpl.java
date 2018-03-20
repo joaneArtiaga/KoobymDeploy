@@ -1,8 +1,10 @@
 package com.koobym.dao.impl;
 
 import java.math.BigInteger;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -165,6 +167,13 @@ public class AuctionHeaderDaoImpl extends BaseDaoImpl<AuctionHeader, Long> imple
 
 		ah = get(auctionHeaderId);
 
+		Calendar cl = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String currDate = df.format(cl.getTime());
+		
+		
+		ah.setDateDelivered(currDate);
 		ah.setAuctionExtraMessage("Delivered");
 		ah.setStatus("Delivered");
 

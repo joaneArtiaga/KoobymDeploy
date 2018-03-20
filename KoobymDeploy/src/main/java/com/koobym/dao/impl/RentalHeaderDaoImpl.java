@@ -1,6 +1,7 @@
 package com.koobym.dao.impl;
 
 import java.math.BigInteger;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,9 +48,16 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		RentalHeader ah = new RentalHeader();
 		MeetUp mu = new MeetUp();
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String currDate = df.format(cal.getTime());
+		
+		
 		ah = get(rentalHeaderId);
 		mu = meetUpDao.get(meetUpId);
 
+		ah.setRentalReturnDate(currDate);
 		ah.setReturnMeetUp(mu);
 
 		Session session = getSessionFactory().getCurrentSession();
@@ -553,6 +561,12 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 
 		rh = get(rentalHeaderId);
 
+		Calendar cl = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String currdate = df.format(cl.getTime());
+		
+		
+		rh.setDateDeliver(currdate);
 		rh.setStatus("Delivered");
 		rh.setRentalExtraMessage("Delivered");
 		rh.getRentalDetail().setRentalStatus("Not Available");

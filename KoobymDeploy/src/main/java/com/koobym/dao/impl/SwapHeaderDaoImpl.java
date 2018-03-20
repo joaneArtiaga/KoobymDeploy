@@ -373,7 +373,12 @@ public class SwapHeaderDaoImpl extends BaseDaoImpl<SwapHeader, Long> implements 
 		SwapHeader sh = new SwapHeader();
 
 		sh = get(swapHeaderId);
+		
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String currDate = df.format(cal.getTime());
 
+		sh.setDateDelivered(currDate);
 		sh.setStatus("Delivered");
 		sh.setSwapExtraMessage("delivered");
 		sh.getSwapDetail().setSwapStatus("Not Available");
