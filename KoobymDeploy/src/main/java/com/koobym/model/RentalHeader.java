@@ -39,7 +39,10 @@ public class RentalHeader {
 
 	@Column(name = "dateConfirmed")
 	private String dateConfirmed;
-	
+
+	@Column(name = "dateRejected")
+	private String dateRejected;
+
 	@Column(name = "dateDeliver")
 	private String dateDeliver;
 	
@@ -73,6 +76,14 @@ public class RentalHeader {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "returnMeetUp")
 	private MeetUp returnMeetUp;
+	
+	public String getDateRejected(){
+		return dateRejected;
+	}
+	
+	public void setDateRejected(String dateRejected){
+		this.dateRejected = dateRejected;
+	}
 	
 	public String getRentalExtraMessage(){
 		return this.rentalExtraMessage;

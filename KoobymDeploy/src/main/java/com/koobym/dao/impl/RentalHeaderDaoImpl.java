@@ -169,7 +169,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		criteria = criteria.createAlias("rentalDetail", "rentalDetail");
 		criteria = criteria.createAlias("rentalDetail.bookOwner", "bookOwner");
 		criteria = criteria.createAlias("rentalDetail.bookOwner.user", "userOwner");
-		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Approved"),
+		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Confirm"),
 				Restrictions.and(Restrictions.eq("status", "Received"), Restrictions.eq("userOwner.userId", userId))));
 		criteria = criteria.add(Restrictions.or(Restrictions.eq("userOwner.userId", new Long(userId)),
 				Restrictions.eq("user.userId", new Long(userId))));
@@ -493,11 +493,16 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 	}
 
 	public void rejectAllOtherRequests(RentalHeader rentalHeader) {
+		
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String currDate = df.format(cal.getTime());
 
-		String sQuery = "update rental_header set Status = 'Rejected' where "
+		String sQuery = "update rental_header set Status = 'Rejected' , dateRejected = :currDate where "
 				+ "rental_header.rentalDetailId = :rentalDetailId and rental_header.rentalHeaderId != :rentalHeaderId";
 
 		SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(sQuery);
+		query.setString("currDate", currDate);
 		query.setLong("rentalDetailId", rentalHeader.getRentalDetail().getRental_detailId());
 		query.setLong("rentalHeaderId", rentalHeader.getRentalHeaderId());
 		query.executeUpdate();
@@ -699,10 +704,15 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		flag = (List<RentalHeader>) criteria.list();
 
 		RentalHeader rentalHeaderTemp;
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String currDate = df.format(cal.getTime());
 		for (int i = 0; i < flag.size(); i++) {
 			rentalHeaderTemp = flag.get(i);
 
 			if (!(flag.get(i).equals(rentalHeaderId))) {
+				
+				rentalHeaderTemp.setDateRejected(currDate);
 				rentalHeaderTemp.setStatus("Rejected");
 				rentalHeaderTemp.setRentalExtraMessage("Accepted other request");
 				session.update(rentalHeaderTemp);
@@ -758,10 +768,14 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 	public RentalHeader rejectRequest(long rentalHeaderId) {
 		RentalHeader rh = new RentalHeader();
 
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String currDate = df.format(cal.getTime());
+		
 		rh = get(rentalHeaderId);
 
 		rh.setStatus("Rejected");
-
+		rh.setDateRejected(currDate);
 		Session session = getSessionFactory().getCurrentSession();
 		session.update(rh);
 
