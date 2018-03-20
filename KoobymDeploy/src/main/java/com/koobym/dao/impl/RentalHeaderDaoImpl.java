@@ -188,7 +188,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		criteria = criteria.createAlias("user", "user");
 		criteria = criteria.add(Restrictions.eq("user.userId", new Long(userId)));
 		criteria = criteria.add(Restrictions.and(Restrictions.or(Restrictions.eq("status", "Received"), Restrictions.eq("status", "Delivered")),
-				Restrictions.eq("rentalExtraMessage", "Delivered")));
+				Restrictions.eq("rentalExtraMessage", "Return")));
 		criteria = criteria.addOrder(Order.desc("rentalEndDate"));
 		criteria = criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		flag = (List<RentalHeader>) criteria.list();
