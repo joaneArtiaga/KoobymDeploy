@@ -169,7 +169,7 @@ public class RentalHeaderDaoImpl extends BaseDaoImpl<RentalHeader, Long> impleme
 		criteria = criteria.createAlias("rentalDetail", "rentalDetail");
 		criteria = criteria.createAlias("rentalDetail.bookOwner", "bookOwner");
 		criteria = criteria.createAlias("rentalDetail.bookOwner.user", "userOwner");
-		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Confirm"),
+		criteria = criteria.add(Restrictions.or(Restrictions.eq("status", "Delivered"),
 				Restrictions.and(Restrictions.eq("status", "Received"), Restrictions.eq("userOwner.userId", userId))));
 		criteria = criteria.add(Restrictions.or(Restrictions.eq("userOwner.userId", new Long(userId)),
 				Restrictions.eq("user.userId", new Long(userId))));
